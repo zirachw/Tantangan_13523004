@@ -248,7 +248,7 @@ This is the visualization of the project structure:
 
 Special thanks to:
 
-1. Dr. Nur Ulfa Maulidevi, S.T, M.Sc. for the guidance in 13 weeks lecturing the K1 IF2211 Algorithm Strategies course
+1. Dr. Nur Ulfa Maulidevi, S.T, M.Sc. for the guidance over 13 weeks lecturing the K1 IF2211 Algorithm Strategies course
 2. Dr. Ir. Rinaldi Munir, M.T. for this additional one-night challenge to keep the spirit of IF'23 students.
 3. Beloved friends who always supporting and keeping my sanity till this day
 
