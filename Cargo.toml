@@ -1,0 +1,8 @@
+[package]
+name = "tsp-solver"
+version = "0.1.0"
+edition = "2021"
+authors = ["Rzi"]
+
+[dependencies]
+# No external dependencies needed for this project
