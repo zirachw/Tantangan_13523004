@@ -2,16 +2,18 @@ mod input;
 mod graph;
 mod output;
 mod tsp;
+mod style;
 
 use std::time::{Duration, Instant};
 use input::Input;
 use graph::Graph;
 use tsp::TSPSolver;
 use output::Output;
+use style::Style;
 
 fn main() 
 {
-    println!("\nWelcome to TSP Solver using Dynamic Programming, made with love by Rzi\n");
+    println!("\n{}\n", Style::header("Welcome to TSP Solver using Dynamic Programming, made with love by Rzi"));
     
     // Get input from user
     let mut input_handler = Input::new();
@@ -31,10 +33,10 @@ fn main()
             let graph: Graph = Graph::new(n, city_names.clone(), adj_matrix.clone());
             let (num_roads, starting_node) = graph.get_graph_info();
             
-            println!("\n[#] Graph Information:");
-            println!("Number of cities: {}", n);
-            println!("Total of roads: {}", num_roads);
-            println!("Starting City: {} (Node {})", city_names[starting_node], starting_node);
+            println!("\n{}", Style::header("[#] Graph Information:"));
+            println!("{} {}", Style::info("Number of cities:"), Style::number(&n.to_string()));
+            println!("{} {}", Style::info("Total of roads:"), Style::number(&num_roads.to_string()));
+            println!("{} {} {}", Style::info("Starting City:"), Style::city_name(&city_names[starting_node]), Style::italic(&format!("(Node {})", starting_node)));
             println!();
             
             // Solve TSP
@@ -56,7 +58,7 @@ fn main()
 
         Err(e) => 
         {
-            eprintln!("Error: {}", e);
+            eprintln!("{}", e);
         }
     }
 }

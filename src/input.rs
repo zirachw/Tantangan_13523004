@@ -1,5 +1,6 @@
 use std::io::{self, Write};
 use std::fs;
+use crate::style::Style;
 
 pub struct Input 
 {
@@ -21,23 +22,23 @@ impl Input {
     
     pub fn get_input(&mut self) -> Result<(), String> 
     {
-        println!("[#] Input mode:");
-        println!("[-] 1. Read .txt file (relative path)");
-        println!("[-] 2. Manual Input");
-        print!("\n[?] Choose option (1 or 2): ");
+        println!("{}", Style::header("[#] Input mode:"));
+        println!("{}", Style::info("[-] 1. Read .txt file (relative path)"));
+        println!("{}", Style::info("[-] 2. Manual Input"));
+        print!("\n{} ", Style::prompt("[?] Choose option (1 or 2):"));
         io::stdout().flush().unwrap();
         
         let mut choice: String = String::new();
         loop
         {
-            io::stdin().read_line(&mut choice).map_err(|_| "[!] Failed to read choice")?;
+            io::stdin().read_line(&mut choice).map_err(|_| Style::error("[!] Failed to read choice"))?;
             match choice.trim() {
                 "1" => return self.read_from_file(),
                 "2" => return self.read_manual(),
                 _ => {
-                    println!("[!] Invalid choice, please enter 1 or 2");
+                    println!("{}", Style::warning("[!] Invalid choice, please enter 1 or 2"));
                     choice.clear();
-                    print!("\n[?] Choose option (1 or 2): ");
+                    print!("\n{} ", Style::prompt("[?] Choose option (1 or 2):"));
                     io::stdout().flush().unwrap();
                 }
             }
@@ -46,25 +47,25 @@ impl Input {
     
     fn read_from_file(&mut self) -> Result<(), String> 
     {
-        println!("\n[#] Insert .txt file relative path (without .txt extension)");
-        println!("[-] Example: test/config-1");
-        print!("[?] Your input: ");
+        println!("\n{}", Style::header("[#] Insert .txt file relative path (without .txt extension)"));
+        println!("{}", Style::info("[-] Example: test/config-1"));
+        print!("{} ", Style::prompt("[?] Your input:"));
         io::stdout().flush().unwrap();
         
         let mut path = String::new();
         loop {
             path.clear();
-            io::stdin().read_line(&mut path).map_err(|_| "[!] Failed to read file path")?;
+            io::stdin().read_line(&mut path).map_err(|_| Style::error("[!] Failed to read file path"))?;
             let trimmed_path = path.trim();
             if trimmed_path.is_empty() 
             {
-                println!("[!] Path cannot be empty, please try again.");
+                println!("{}", Style::warning("[!] Path cannot be empty, please try again."));
                 continue;
             }
 
             let file_path: String    = format!("{}.txt", trimmed_path);
             let file_content: String = fs::read_to_string(&file_path)
-                .map_err(|_| "[!] Failed to read the file".to_string())?;
+                .map_err(|_| Style::error("[!] Failed to read the file"))?;
 
             return self.parse_content(&file_content);
         }
@@ -72,39 +73,39 @@ impl Input {
     
     fn read_manual(&mut self) -> Result<(), String> 
     {
-        println!("\n[#] Enter input in the following format:");
-        println!("[-] <N city>");
-        println!("[-] <City Names>");
-        println!("[-] <Adjacency Matrix>");
-        println!("\n[#] Example:");
-        println!("4");
-        println!("Medan Jakarta Samarinda Depok");
-        println!("0 10 15 20");
-        println!("10 0 35 25");
-        println!("15 35 0 30");
-        println!("20 25 30 0");
-        println!("\n[#] Note: Matrix can be asymmetric (directed graph)");
-        println!("\n[?] Your input:");
+        println!("\n{}", Style::header("[#] Enter input in the following format:"));
+        println!("{}", Style::info("[-] <N city>"));
+        println!("{}", Style::info("[-] <City Names>"));
+        println!("{}", Style::info("[-] <Adjacency Matrix>"));
+        println!("\n{}", Style::header("[#] Example:"));
+        println!("{}", Style::number("4"));
+        println!("{}", Style::highlight("Medan Jakarta Samarinda Depok"));
+        println!("{}", Style::number("0 10 15 20"));
+        println!("{}", Style::number("10 0 35 25"));
+        println!("{}", Style::number("15 35 0 30"));
+        println!("{}", Style::number("20 25 30 0"));
+        println!("\n{}", Style::italic("[#] Note: Matrix can be asymmetric (directed graph)"));
+        println!("\n{}", Style::prompt("[?] Your input:"));
         
         let mut content = String::new();
         
         // Read N
         let mut line = String::new();
-        io::stdin().read_line(&mut line).map_err(|_| "[!] Failed to read N")?;
+        io::stdin().read_line(&mut line).map_err(|_| Style::error("[!] Failed to read N"))?;
         content.push_str(&line);
         
         // Read city names
         line.clear();
-        io::stdin().read_line(&mut line).map_err(|_| "[!] Failed to read city names")?;
+        io::stdin().read_line(&mut line).map_err(|_| Style::error("[!] Failed to read city names"))?;
         content.push_str(&line);
         
         // Read matrix lines
-        let n: usize = content.lines().next().unwrap().trim().parse().map_err(|_| "[!] Invalid number of cities")?;
+        let n: usize = content.lines().next().unwrap().trim().parse().map_err(|_| Style::error("[!] Invalid number of cities"))?;
         
         for i in 0..n 
         {
             line.clear();
-            io::stdin().read_line(&mut line).map_err(|_| format!("[!] Failed to read matrix row {}", i))?;
+            io::stdin().read_line(&mut line).map_err(|_| Style::error(&format!("[!] Failed to read matrix row {}", i)))?;
             content.push_str(&line);
         }
         
@@ -119,15 +120,15 @@ impl Input {
         
         if lines.is_empty() 
         {
-            return Err("[!] Empty input".to_string());
+            return Err(Style::error("[!] Empty input"));
         }
         
         // Parse N
-        self.n = lines[0].trim().parse().map_err(|_| "[!] Invalid number of cities")?;
+        self.n = lines[0].trim().parse().map_err(|_| Style::error("[!] Invalid number of cities"))?;
         
         if self.n < 2 
         {
-            return Err("[!] Number of cities must be at least 2".to_string());
+            return Err(Style::error("[!] Number of cities must be at least 2"));
         }
         
         // Parse city names
@@ -137,14 +138,14 @@ impl Input {
         
         if self.city_names.len() != self.n 
         {
-            return Err(format!("[!] Expected {} city names, got {}", 
-                self.n, self.city_names.len()));
+            return Err(Style::error(&format!("[!] Expected {} city names, got {}", 
+                self.n, self.city_names.len())));
         }
         
         // Parse adjacency matrix
         if lines.len() < self.n + 2 
         {
-            return Err("[!] Incomplete adjacency matrix".to_string());
+            return Err(Style::error("[!] Incomplete adjacency matrix"));
         }
         
         self.adj_matrix = Vec::new();
@@ -156,12 +157,12 @@ impl Input {
                 .collect();
             
             let row = row.map_err(|_| 
-                format!("[!] Invalid number in matrix row {}", i))?;
+                Style::error(&format!("[!] Invalid number in matrix row {}", i)))?;
             
             if row.len() != self.n 
             {
-                return Err(format!("[!] Row {} has {} elements, expected {}", 
-                    i, row.len(), self.n));
+                return Err(Style::error(&format!("[!] Row {} has {} elements, expected {}", 
+                    i, row.len(), self.n)));
             }
             
             self.adj_matrix.push(row);
@@ -177,7 +178,7 @@ impl Input {
         {
             if self.adj_matrix[i][i] != 0 
             {
-                return Err(format!("[!] Diagonal element at ({}, {}) should be zero (distance from city to itself)", i, i));
+                return Err(Style::error(&format!("[!] Diagonal element at ({}, {}) should be zero (distance from city to itself)", i, i)));
             }
         }
         
@@ -187,7 +188,7 @@ impl Input {
             {
                 if i != j && self.adj_matrix[i][j] < 0 
                 {
-                    return Err(format!("[!] Negative distance found at ({}, {}): {}", i, j, self.adj_matrix[i][j]));
+                    return Err(Style::error(&format!("[!] Negative distance found at ({}, {}): {}", i, j, self.adj_matrix[i][j])));
                 }
             }
         }

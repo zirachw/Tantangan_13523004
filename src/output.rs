@@ -1,4 +1,5 @@
 use std::time::Duration;
+use crate::style::Style;
 
 pub struct Output;
 
@@ -13,8 +14,8 @@ impl Output
             .unwrap_or(0)
             .max(7);
         
-        println!("\n[#] Adjacency Matrix:");
-        println!("[-] Note: Value at [i][j] represents distance from city i to city j\n");
+        println!("\n{}", Style::header("[#] Adjacency Matrix:"));
+        println!("{}\n", Style::italic("[-] Note: Value at [i][j] represents distance from city i to city j"));
         
         print!("+");
         for _ in 0..=n 
@@ -23,10 +24,10 @@ impl Output
         }
         println!();
         
-        print!("| {:width$} |", "From/To", width = max_city_len);
+        print!("| {} |", Style::bold(&format!("{:width$}", "From/To", width = max_city_len)));
         for city in city_names 
         {
-            print!(" {:^width$} |", city, width = max_city_len);
+            print!(" {} |", Style::city_name(&format!("{:^width$}", city, width = max_city_len)));
         }
         println!();
         
@@ -39,17 +40,17 @@ impl Output
         
         for (i, city) in city_names.iter().enumerate() 
         {
-            print!("| {:width$} |", city, width = max_city_len);
+            print!("| {} |", Style::city_name(&format!("{:width$}", city, width = max_city_len)));
             for j in 0..n 
             {
                 let value = adj_matrix[i][j];
                 if value == 0 && i != j 
                 {
-                    print!(" {:^width$} |", "∞", width = max_city_len);
+                    print!(" {} |", Style::warning(&format!("{:^width$}", "∞", width = max_city_len)));
                 } 
                 else 
                 {
-                    print!(" {:^width$} |", value, width = max_city_len);
+                    print!(" {} |", Style::number(&format!("{:^width$}", value, width = max_city_len)));
                 }
             }
             println!();
@@ -74,20 +75,20 @@ impl Output
     {
         if min_cost == i32::MAX 
         {
-            println!("[!] No valid tour found!");
-            println!("[-] This might happen if:");
-            println!("[-] 1. The graph is not strongly connected");
-            println!("[-] 2. There's no path that visits all cities and returns to start");
+            println!("{}", Style::error("[!] No valid tour found!"));
+            println!("{}", Style::warning("[-] This might happen if:"));
+            println!("{}", Style::warning("[-] 1. The graph is not strongly connected"));
+            println!("{}", Style::warning("[-] 2. There's no path that visits all cities and returns to start"));
             return;
         }
         
-        println!("[#] Results:");
-        println!("[~] Minimum cost: {}", min_cost);
-        println!("[~] Shortest tour(s) with minimum cost found: {}", tours.len());
+        println!("{}", Style::header("[#] Results:"));
+        println!("{} {}", Style::success("[~] Minimum cost:"), Style::bold(&min_cost.to_string()));
+        println!("{} {}", Style::success("[~] Shortest tour(s) with minimum cost found:"), Style::bold(&tours.len().to_string()));
         
         if !tours.is_empty() 
         {
-            println!("\n[~] Example of shortest tour:");
+            println!("\n{}", Style::info("[~] Example of shortest tour:"));
             print!("    ");
             
             let first_tour = &tours[0];
@@ -95,13 +96,13 @@ impl Output
             {
                 if i > 0 
                 {
-                    print!(" → ");
+                    print!(" {} ", Style::arrow());
                 }
-                print!("{}", city_names[city]);
+                print!("{}", Style::city_name(&city_names[city]));
             }
             println!();
 
-            println!("\n[~] Step-by-step costs:");
+            println!("\n{}", Style::info("[~] Step-by-step costs:"));
             let mut total: i32 = 0;
             for i in 0..first_tour.len() - 1 
             {
@@ -109,7 +110,14 @@ impl Output
                 let to: usize  = first_tour[i+1];
                 let cost: i32  = adj_matrix[from][to];
                 total += cost;
-                println!("    {} → {} (cost: {}) (sum: {})", city_names[from], city_names[to], cost, total);
+                println!("    {} {} {} {} {} {}", 
+                    Style::city_name(&city_names[from]), 
+                    Style::arrow(), 
+                    Style::city_name(&city_names[to]), 
+                    Style::italic(&format!("(cost: {})", cost)),
+                    Style::bold("(sum:"),
+                    Style::bold(&format!("{})", total))
+                );
             }
         }
         
@@ -128,10 +136,10 @@ impl Output
         {
             format!("{:.2}s", duration.as_secs_f64())
         };
-        println!("[~] Execution time = {}", exec_time);
+        println!("{} {}", Style::success("[~] Execution time ="), Style::highlight(&exec_time));
         
         // Display complexity
-        println!("[~] T(n) = T(n² × 2ⁿ)");
-        println!("[~] O(n) = O(n² × 2ⁿ) where n = {}", n);
+        println!("{} {}", Style::info("[~] T(n) ="), Style::italic("T(n² × 2ⁿ)"));
+        println!("{} {} {}", Style::info("[~] O(n) ="), Style::italic("O(n² × 2ⁿ)"), Style::italic(&format!("where n = {}", n)));
     }
 }
