@@ -3,13 +3,6 @@ pub struct Style;
 impl Style {
     // Colors
     pub const RESET: &'static str = "\x1b[0m";
-    pub const RED: &'static str = "\x1b[31m";
-    pub const GREEN: &'static str = "\x1b[32m";
-    pub const YELLOW: &'static str = "\x1b[33m";
-    pub const BLUE: &'static str = "\x1b[34m";
-    pub const MAGENTA: &'static str = "\x1b[35m";
-    pub const CYAN: &'static str = "\x1b[36m";
-    pub const WHITE: &'static str = "\x1b[37m";
     pub const BRIGHT_RED: &'static str = "\x1b[91m";
     pub const BRIGHT_GREEN: &'static str = "\x1b[92m";
     pub const BRIGHT_YELLOW: &'static str = "\x1b[93m";
@@ -21,7 +14,6 @@ impl Style {
     // Font styles
     pub const BOLD: &'static str = "\x1b[1m";
     pub const ITALIC: &'static str = "\x1b[3m";
-    pub const UNDERLINE: &'static str = "\x1b[4m";
 
     // Helper methods for common UI elements
     pub fn header(text: &str) -> String {
