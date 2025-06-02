@@ -20,19 +20,19 @@ impl Graph
     
     pub fn get_graph_info(&self) -> (usize, usize) 
     {
-        let num_roads = self.count_roads();
-        let starting_node = 0;
+        let num_roads: usize     = self.count_roads();
+        let starting_node: usize = 0;
         (num_roads, starting_node)
     }
     
     fn count_roads(&self) -> usize 
     {
-        let mut count = 0;
+        let mut count: usize = 0;
         for i in 0..self.n 
         {
             for j in 0..self.n 
             {
-                if i != j && self.adj_matrix[i][j] > 0 
+                if i != j && self.adj_matrix[i][j] > 0 && self.adj_matrix[i][j] != i32::MAX
                 {
                     count += 1;
                 }
