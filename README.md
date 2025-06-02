@@ -123,24 +123,28 @@ _**Complexity Analysis:**_
 
 ### Preview <a name="preview"></a>
 
+<p align="center">
+    <img width="100%" src="https://github.com/user-attachments/assets/fafa0137-90f0-465c-aace-704eb76fb8b4" />
+</p>
+
 ---
 
 ### Features
 
-### *This project contains:*
+_**This project contains:**_
 
 - **Main Program as TSP Solver with _Dynamic Programming_ approach**
 - **Load `.txt` file mode**
 - **Manually input mode**
 
-### *Take a peek:*
+_**Take a peek:**_
 
 - **The core logic is located at `~/src/`**
 - **Create Pull Request and Collaborate for project improvement**
 
 ---
 
-### Installation? <a name="install"></a>
+### Installation <a name="install"></a>
 
 > [!NOTE]  
 > Before you start, install these dependencies first with links given :D
@@ -210,6 +214,15 @@ _**The output format:**_
 - An example of the shortest tour path
 - Execution time
 
+<br>
+
+_**Screenshot Example:**_
+
+<p align="center">
+    <img width="100%" alt="TSP" src="https://github.com/user-attachments/assets/4bfcda61-60ad-499d-8be4-6c690df92333" />
+    <img width="100%" alt="TSP" src="https://github.com/user-attachments/assets/f2dcaaab-3b8e-41a7-a634-e9d32b968383" />
+</p>
+
 ---
 
 ### Project Structure
@@ -228,6 +241,16 @@ This is the visualization of the project structure:
     ├── tsp.rs          # TSP algorithm implementation
     └── output.rs       # Output formatting and display
 ```
+
+---
+
+### Acknowledgements <a name="acknowledgements"></a>
+
+Special thanks to:
+
+1. Dr. Nur Ulfa Maulidevi, S.T, M.Sc. for the guidance in 13 weeks lecturing the K1 IF2211 Algorithm Strategies course
+2. Dr. Ir. Rinaldi Munir, M.T. for this additional one-night challenge to keep the spirit of IF'23 students.
+3. Beloved friends who always supporting and keeping my sanity till this day
 
 ---
 
